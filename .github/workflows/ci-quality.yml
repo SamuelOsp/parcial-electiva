@@ -1,0 +1,37 @@
+name: CI Calidad de Software
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del repositorio
+      uses: actions/checkout@v3
+
+    - name: Configurar Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.9"
+
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Analisis con Flake8 (Linter)
+      run: |
+        # E9,F63,F7,F82 son errores sintácticos graves
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Verificación de estilo estándar (PEP8)
+        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
+
+
+    - name: Correr pruebas y verificar cobertura
+      run: |
+        pytest --cov=src/ --cov-fail-under=80 tests/
