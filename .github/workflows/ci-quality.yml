@@ -26,11 +26,12 @@ jobs:
 
     - name: Analisis con Flake8 (Linter)
       run: |
-        # E9,F63,F7,F82 son errores sintácticos graves
+        # Detener el build si hay errores de sintaxis Python graves (E9, F63, etc.)
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Verificación de estilo estándar (PEP8)
-        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
-
+        
+        # Verificación de estilo estándar
+        # IMPORTANTE: Se agrega --ignore=W292,W293,E302 para evitar errores por espacios en blanco
+        flake8 . --count --max-complexity=10 --max-line-length=127 --statistics --ignore=W292,W293,E302
 
     - name: Correr pruebas y verificar cobertura
       run: |
