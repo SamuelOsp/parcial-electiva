@@ -13,4 +13,4 @@ def dividir(a, b):
 def es_par(numero):
     """Verifica si un número es par."""
     return numero % 2 == 0
-    
+
